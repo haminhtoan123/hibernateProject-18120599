@@ -22,7 +22,9 @@
         <property name="show_sql">true</property>
  
         <!-- List mapping annotation classes -->
- 
+ 		<mapping resource="Mon/Mon.hbm.xml"/> 
+
          <mapping resource="SinhVien/SinhVien.hbm.xml"/> 
+
     </session-factory>
 </hibernate-configuration>

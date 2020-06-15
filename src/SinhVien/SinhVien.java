@@ -1,5 +1,7 @@
 package SinhVien;
 
+import java.awt.event.KeyEvent;
+
 public class SinhVien   implements java.io.Serializable {
 	private String mssv;
 	private String hoten;
@@ -55,29 +57,12 @@ public class SinhVien   implements java.io.Serializable {
 	}
 	public void setTenlop(String tenlop) {
 		this.tenlop = tenlop;
-	}/*
-	public float getDiemGK() {
-		return diemGK;
 	}
-	public void setDiemGK(float diemGK) {
-		this.diemGK = diemGK;
-	}
-	public float getDiemCK() {
-		return diemCK;
-	}
-	public void setDiemCK(float diemCK) {
-		this.diemCK = diemCK;
-	}
-	public float getDiemKhac() {
-		return diemKhac;
-	}
-	public void setDiemKhac(float diemKhac) {
-		this.diemKhac = diemKhac;
-	}*/
 	public String getMk() {
 		return mk;
 	}
 	public void setMk(String mk) {
 		this.mk = mk;
 	}
+	
 }

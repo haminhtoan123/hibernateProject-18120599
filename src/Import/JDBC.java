@@ -10,10 +10,11 @@ import SinhVien.SinhVien;
 public class JDBC
 {
 	static Connection con = null;
-	public static void ImportDSSV( String Link, String TenLop)
+	static Statement st;
+	public static void ImportDSSV( String Link, String TenLop)// Giao Vu nhap ten lop truoc
 	{
 		try {
-			Statement st = con.createStatement();
+			
 			st.execute("create View SinhVienS\r\n" + 
 					"AS\r\n" + 
 					"select MSSV,HoTen,GioiTinh,CMND\r\n" + 
@@ -37,10 +38,34 @@ public class JDBC
 		}
 		
 	}
+	public static void ImportTKB(String link)
+	{
+		try {
+		
+		st.execute("create View TKB\r\n" + 
+				"as \r\n" + 
+				"select  TenLop,MaMon,TenMon,PhongHoc\r\n" + 
+				"from Mon ");
+		st.execute("BULK\r\n" + 
+				"INSERT TKB\r\n" + 
+				"from '"+link+"'\r\n" + 
+				"with\r\n" + 
+				"(\r\n" + 
+				"	FORMAT = 'CSV',\r\n" + 
+				"	FIRSTROW =2,\r\n" + 
+				"	 FIELDTERMINATOR = ',',  --CSV field delimiter\r\n" + 
+				"    ROWTERMINATOR = '\\n',   --Use to shift the control to next row\r\n" + 
+				"    TABLOCK\r\n" + 
+				")");
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	}
 	public static void CreateDB() 
 	{
 		try {
-		Statement st = con.createStatement();
+		st = con.createStatement();
 		st.execute("create database HibernateData");
 		st.execute("use HibernateData");
 		//tao table sv
@@ -90,13 +115,11 @@ public class JDBC
 				"	MK varchar(10)\r\n" + 
 				"	primary key(ID)\r\n" + 
 				")");
-		System.out.println("succeed2");
 		st.execute("alter table DangKi add constraint FK_DangKi_SinhVien foreign key (MSSV) references SinhVien(MSSV)");
 		st.execute("alter table DangKi add constraint FK_DangKi_Mon foreign key(TenLop,MaMon)  references Mon(TenLop,MaMon)");
 		st.execute("alter table BangDiem add constraint FK_BangDiem_SinhVien foreign key(MSSV) references SinhVien(MSSV)");
 		
-		con.close();
-		System.out.println("succeed");
+		//con.close();
 		}
 		catch(Exception ex){
 			System.out.println("Error: " + ex.getMessage());
@@ -121,13 +144,14 @@ public class JDBC
 	{
 		Connect();
 		try {
-			Statement st = con.createStatement();
+			 st = con.createStatement();
 			st.execute("use HibernateData");
 		}catch(Exception ex) {
 			CreateDB();
 		}
-		ImportDSSV("E:\\\\hox hanh\\\\java\\\\Public-CQ2018-20200609T013918Z-001\\\\17HCB.csv","");
-	
+		ImportDSSV("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB.csv","");
+		ImportTKB("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB-TKB.csv");
+		System.out.println("succeed");
 	}
 }
 	
