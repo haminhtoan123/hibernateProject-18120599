@@ -140,15 +140,18 @@ public class JDBC
 			System.out.println("Error: " + ex.getMessage());
 		}
 	}
-	public static void main(String args[])
+	public static void main(String args[]) 
 	{
 		Connect();
 		try {
 			 st = con.createStatement();
 			st.execute("use HibernateData");
+			
 		}catch(Exception ex) {
+			System.out.println("connection fail");
 			CreateDB();
 		}
+		//System.out.println(rs.getString(1)+" " + rs.getString(2) + " ");
 		ImportDSSV("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB.csv","");
 		ImportTKB("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB-TKB.csv");
 		System.out.println("succeed");

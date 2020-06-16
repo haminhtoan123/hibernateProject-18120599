@@ -34,7 +34,7 @@ public class MonDAO {
 	            List Mons = session.createQuery("FROM Mon").list();
 	            for (Iterator iterator = Mons.iterator(); iterator.hasNext();) {
 	                Mon mon = (Mon) iterator.next();
-	                System.out.println("Phong hoc: " + mon.getPhongHoc());
+	                System.out.println("Phong hoc: " + mon.getPhonghoc());
 	            }
 	        } catch (HibernateException e) {
 	            e.printStackTrace();
@@ -44,6 +44,12 @@ public class MonDAO {
 	    }
 	  public static void main(String args[])
 	  {
-		  listSinhVien();
+		
+		  List<Mon> temp = layDanhSachMon() ;
+		  for(int i=0;i<temp.size();i++)
+		  {
+			  System.out.println(" PH: "+ temp.get(i).getPhonghoc());
+		  }
+		 // listSinhVien();
 	  }
 }

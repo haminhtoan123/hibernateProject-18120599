@@ -2,15 +2,19 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  <hibernate-mapping>  
   <class  name="Mon.Mon" table="Mon">      
-     <composite-id name="id">
-         <key-property name = "mamon" column ="MaMon" />
-         <key-property name = "tenLop" column ="TenLop"/>
+     <composite-id >
+         <key-property name = "mamon"  type = "string">
+          <column length="10" name="MaMon"/>              
+         </key-property>  
+         <key-property name = "tenlop"  type = "string">
+          <column length="10" name="TenLop"/>         
+         </key-property>
      </composite-id>       
-   	 <property name="tenMon" type="string">          
-   	 	<column length="50" name="TenMon"/>       
+   	 <property name="tenmon" type="string">      
+   	  <column length="50" name="TenMon"/>      
    	 </property>       
-   	 <property name="phongHoc" type="string">        
-   	 	<column length="3" name="PhongHoc"/>       
+   	 <property name="phonghoc" type="string">    
+   	  <column length="3" name="PhongHoc"/>            
    	 </property>       
    	</class> 
  </hibernate-mapping>
