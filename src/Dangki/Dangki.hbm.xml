@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ <hibernate-mapping>  
+  <class  name="Dangki.Dangki" table="Dangki">    
+
+
+  <composite-id >
+       <key-property name="mssv" type="string">
+          <column length="10" name="MSSV"/>              
+        </key-property>  
+        <key-property name = "mamon"  type = "string">
+           <column length="10" name="MaMon"/>              
+        </key-property>  
+        <key-property name = "tenlop"  type = "string">
+           <column length="10" name="TenLop"/>         
+        </key-property>
+  </composite-id>         
+  <many-to-one class="Mon.Mon" name="mon"  fetch="select"
+    insert="false" update="false">         
+         <column length="10" name="MaMon" not-null="true"
+           />  
+        <column length="10" name="TenLop" not-null="true"
+           />      
+  </many-to-one>   
+  <many-to-one class="SinhVien.SinhVien" name="sinhVien"  fetch="select" insert="false" update="false">         
+         <column length="10" name="MSSV" not-null="true"
+          />      
+  </many-to-one>  
+
+   	</class> 
+ </hibernate-mapping>
