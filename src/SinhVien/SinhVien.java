@@ -2,7 +2,6 @@ package SinhVien;
 
 import java.awt.event.KeyEvent;
 
-import Dangki.Dangki;
 
 public class SinhVien   implements java.io.Serializable {
 	private String mssv;
@@ -23,12 +22,12 @@ public class SinhVien   implements java.io.Serializable {
 	{
 		this.mssv=mSSV;
 	}
-	public SinhVien(String mSSV, String hoTen, String gioiTinh, String cMND )
+	public SinhVien(String mssv, String hoten, String gioitinh, String cmnd )
 	{
-		this.mssv=mSSV;
-		this.hoten = hoTen;
-		this.gioitinh = gioiTinh;
-		this.cmnd = cMND;
+		this.mssv=mssv;
+		this.hoten = hoten;
+		this.gioitinh = gioitinh;
+		this.cmnd = cmnd;
 	}
 	public String getMssv() {
 		return mssv;

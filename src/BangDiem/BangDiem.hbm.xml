@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  <hibernate-mapping>  
-  <class  name="Dangki.Dangki" table="Dangki">    
+  <class  name="BangDiem.BangDiem" table="BangDiem">    
 
 
   <composite-id >
@@ -14,7 +14,27 @@
         <key-property name = "tenlop"  type = "string">
            <column length="10" name="TenLop"/>         
         </key-property>
-  </composite-id>         
+  </composite-id>
+
+ <property name="hoten" type="string">          
+         <column length="50" name="HoTen"/>       
+       </property>
+ <property name="diemgk" type="float">          
+         <column name="DiemGk"/>       
+       </property>
+  <property name="diemck" type="float">          
+         <column name="DiemCk"/>       
+       </property>
+ <property name="diemkhac" type="float">          
+         <column name="DiemKhac"/>       
+       </property>
+   <property name="diemtong" type="float">          
+         <column name="DiemTong"/>       
+       </property>
+
+
+
+
   <many-to-one class="Mon.Mon" name="mon"  fetch="select"
     insert="false" update="false">         
          <column length="10" name="MaMon" not-null="true"
@@ -27,5 +47,5 @@
           />      
   </many-to-one>  
 
-   	</class> 
+      </class> 
  </hibernate-mapping>

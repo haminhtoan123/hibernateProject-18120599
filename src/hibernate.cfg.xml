@@ -23,7 +23,7 @@
  
         <!-- List mapping annotation classes -->
  		<mapping resource="Mon/Mon.hbm.xml"/> 
-    <mapping resource="Dangki/Dangki.hbm.xml"/> 
+        <mapping resource="BangDiem/BangDiem.hbm.xml"/> 
     <mapping resource="SinhVien/SinhVien.hbm.xml"/> 
 
     </session-factory>

@@ -13,12 +13,9 @@ public class JDBC
 	static Statement st;
 	public static void ImportDSSV( String Link, String TenLop)// Giao Vu nhap ten lop truoc
 	{
+		
 		try {
-			
-			st.execute("create View SinhVienS\r\n" + 
-					"AS\r\n" + 
-					"select MSSV,HoTen,GioiTinh,CMND\r\n" + 
-					"from SinhVien\r\n" );
+
 			st.execute(
 					"BULK\r\n" + 
 					"INSERT SinhVienS\r\n" + 
@@ -32,6 +29,12 @@ public class JDBC
 					"    ROWTERMINATOR = '\\n',   --Use to shift the control to next row\r\n" + 
 					"    TABLOCK\r\n" + 
 					")");
+			st.execute("update SinhVien\r\n" + 
+					"Set TenLop = '"+TenLop+"'\r\n" + 
+					"where TenLop is null;");
+			st.execute("update SinhVien\r\n" + 
+					"set MK = MSSV\r\n" + 
+					"where MK is null;");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,12 +43,10 @@ public class JDBC
 	}
 	public static void ImportTKB(String link)
 	{
+	
 		try {
 		
-		st.execute("create View TKB\r\n" + 
-				"as \r\n" + 
-				"select  TenLop,MaMon,TenMon,PhongHoc\r\n" + 
-				"from Mon ");
+		
 		st.execute("BULK\r\n" + 
 				"INSERT TKB\r\n" + 
 				"from '"+link+"'\r\n" + 
@@ -57,10 +58,10 @@ public class JDBC
 				"    ROWTERMINATOR = '\\n',   --Use to shift the control to next row\r\n" + 
 				"    TABLOCK\r\n" + 
 				")");
-	} catch (SQLException e) {
+		} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+		}
 	}
 	public static void CreateDB() 
 	{
@@ -79,14 +80,14 @@ public class JDBC
 				"	MK varchar(10)\r\n" + 
 				"	primary key (MSSV)\r\n" + 
 				")");
-		//tao ds dang ki
+		/*//tao ds dang ki
 		st.execute("create table DangKi\r\n" + 
 				"(\r\n" + 
 				"	MSSV varchar(10),\r\n" + 
 				"	MaMon varchar(10),\r\n" + 
 				"	TenLop varchar(10)\r\n" + 
 				"	primary key (MSSV, MaMon, TenLop)\r\n" + 
-				")");
+				")");*/
 		//tao ds Mon
 		st.execute("create table Mon\r\n" + 
 				"(\r\n" + 
@@ -105,8 +106,9 @@ public class JDBC
 				"	MaMon varchar(10),\r\n" + 
 				"	DiemGK float,\r\n" + 
 				"	DiemCK float,\r\n" + 
-				"	DiemKhac float\r\n" + 
-				"	primary key (MSSV)\r\n" + 
+				"	DiemKhac float,\r\n" + 
+				"	DiemTong float\r\n" + 
+				"	primary key (MSSV,TenLop,MaMon)\r\n" + 
 				")");
 		// tao table GiaoVu
 		st.execute("create table GiaoVu\r\n" + 
@@ -115,10 +117,17 @@ public class JDBC
 				"	MK varchar(10)\r\n" + 
 				"	primary key(ID)\r\n" + 
 				")");
-		st.execute("alter table DangKi add constraint FK_DangKi_SinhVien foreign key (MSSV) references SinhVien(MSSV)");
-		st.execute("alter table DangKi add constraint FK_DangKi_Mon foreign key(TenLop,MaMon)  references Mon(TenLop,MaMon)");
 		st.execute("alter table BangDiem add constraint FK_BangDiem_SinhVien foreign key(MSSV) references SinhVien(MSSV)");
+		st.execute("alter table BangDiem add constraint FK_BandDiem_Mon foreign key(TenLop,MaMon) references Mon(TenLop,MaMon)");
 		
+		st.execute("create View SinhVienS\r\n" + 
+				"AS\r\n" + 
+				"select MSSV,HoTen,GioiTinh,CMND\r\n" + 
+				"from SinhVien\r\n" );
+		st.execute("create View TKB\r\n" + 
+				"as \r\n" + 
+				"select  TenLop,MaMon,TenMon,PhongHoc\r\n" + 
+				"from Mon ");
 		//con.close();
 		}
 		catch(Exception ex){
@@ -135,26 +144,38 @@ public class JDBC
 		try {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         con = DriverManager.getConnection("jdbc:sqlserver://localhost:49690;integratedSecurity=true");
+        st=con.createStatement();
+		st.execute("use HibernateData");
         }
     	catch (Exception ex){
-			System.out.println("Error: " + ex.getMessage());
+    		System.out.println("Database not Exist, Create DB");
+			CreateDB();
 		}
+	}
+	public static void Close()
+	{
+		try {
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
 	}
 	public static void main(String args[]) 
 	{
 		Connect();
-		try {
-			 st = con.createStatement();
-			st.execute("use HibernateData");
+		/*try {
+			
 			
 		}catch(Exception ex) {
-			System.out.println("connection fail");
+			System.out.println("connection fail"); 
 			CreateDB();
-		}
+		}*/
 		//System.out.println(rs.getString(1)+" " + rs.getString(2) + " ");
-		ImportDSSV("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB.csv","");
-		ImportTKB("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB-TKB.csv");
-		System.out.println("succeed");
+		/*ImportDSSV("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB.csv","18HCB");
+		ImportTKB("E:\\hox hanh\\java\\Public-CQ2018-20200609T013918Z-001\\17HCB-TKB.csv");*/
+		System.out.println("succeed"); 
+	
 	}
 }
 	

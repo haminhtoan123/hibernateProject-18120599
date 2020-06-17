@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import Dangki.Dangki;
 
 //@Embeddable
 
@@ -30,17 +29,7 @@ public class Mon implements java.io.Serializable{
 	//@Column(name = "PhongHoc")
 	private String phonghoc;
 	public Mon() {}
-	/*public Mon(monId id, String tenmon,String phonghoc) {
-		setId(id);
-		this.tenmon=tenmon;
-		this.phonghoc=phonghoc;
-	}*/
-	/*public monId getId() {
-		return id;
-	}
-	public void setId(monId id) {
-		this.id = id;
-	}*/
+	
 	public String getTenmon() {
 		return tenmon;
 	}

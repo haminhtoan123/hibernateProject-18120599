@@ -7,12 +7,28 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import util.HibernateUtil;
 
 
 public class SinhVienDAO {
 	 private static SessionFactory factory;
+	 public static boolean ThemSinhVien(SinhVien sv, Session session,Transaction transaction)
+	 {
+			//if(1) {};-> catch except
+			try {
+				transaction = session.beginTransaction(); 
+				session.save(sv);
+				transaction.commit();
+			}catch(HibernateException ex)
+			{
+				 transaction.rollback();       
+				 System.err.println(ex); 
+			}
+		return true;
+		 
+	 }
 	 public static List<SinhVien> layDanhSachSinhVien() 
 	 {    
 		 factory = HibernateUtil.getSessionFactory();
