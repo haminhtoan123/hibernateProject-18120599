@@ -3,7 +3,7 @@
  <hibernate-mapping>  
   <class  name="Mon.Mon" table="Mon">      
      <composite-id >
-         <key-property name = "mamon"  type = "string">
+         <key-property name = "mamon"  type = "string" >
           <column length="10" name="MaMon"/>              
          </key-property>  
          <key-property name = "tenlop"  type = "string">
@@ -16,5 +16,5 @@
    	 <property name="phonghoc" type="string">    
    	  <column length="3" name="PhongHoc"/>            
    	 </property>       
-   	</class> 
+      	</class> 
  </hibernate-mapping>

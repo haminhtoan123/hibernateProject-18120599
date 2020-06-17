@@ -2,6 +2,8 @@ package SinhVien;
 
 import java.awt.event.KeyEvent;
 
+import Dangki.Dangki;
+
 public class SinhVien   implements java.io.Serializable {
 	private String mssv;
 	private String hoten;
@@ -64,5 +66,6 @@ public class SinhVien   implements java.io.Serializable {
 	public void setMk(String mk) {
 		this.mk = mk;
 	}
+
 	
 }

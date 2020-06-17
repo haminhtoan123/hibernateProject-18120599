@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import Dangki.Dangki;
+
 //@Embeddable
 
 
@@ -27,7 +29,6 @@ public class Mon implements java.io.Serializable{
 	private String tenmon;
 	//@Column(name = "PhongHoc")
 	private String phonghoc;
-	
 	public Mon() {}
 	/*public Mon(monId id, String tenmon,String phonghoc) {
 		setId(id);
@@ -64,6 +65,7 @@ public class Mon implements java.io.Serializable{
 	public void setTenlop(String tenlop) {
 		this.tenlop = tenlop;
 	}
+
 	
 }
 

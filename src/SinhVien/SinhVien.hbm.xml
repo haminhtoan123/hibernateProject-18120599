@@ -20,7 +20,7 @@
    	 	<column length="10" name="TenLop"/>       
    	 </property>  
    	  <property name="mk" type="string">          
-   	 	<column length="10" name="MK"/>       
-   	 </property>      
-   	</class> 
+   	 	<column length="10" name="MK"/>   
+         </property>     
+   	   	</class> 
  </hibernate-mapping>
