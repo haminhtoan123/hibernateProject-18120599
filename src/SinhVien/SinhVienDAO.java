@@ -9,11 +9,31 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import Mon.Mon;
 import util.HibernateUtil;
 
 
 public class SinhVienDAO {
 	 private static SessionFactory factory;
+	 
+	 public static List<SinhVien> LayDanhSachSinhVienTheoLop(String tenlop,Session session)
+	 {
+		 List<SinhVien> ds= null;
+		 try {
+			 
+	    		//ds = session.createQuery("FROM Mon WHERE tenlop =:tenlop").list();
+	    		String hql ="FROM SinhVien WHERE tenlop =:tenlop";
+	    		Query query = session.createQuery(hql);
+	    		query.setParameter("tenlop",tenlop);
+	    		ds = query.list();
+	    		
+	    	} catch (HibernateException e) {
+	        e.printStackTrace();
+	    	}
+		 
+		
+		return ds;
+	 }
 	 public static boolean ThemSinhVien(SinhVien sv, Session session,Transaction transaction)
 	 {
 			//if(1) {};-> catch except

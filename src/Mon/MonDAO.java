@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -11,9 +12,30 @@ import SinhVien.SinhVien;
 import util.HibernateUtil;
 
 public class MonDAO {
-	private static SessionFactory factory;
+	//private static SessionFactory factory;
+	
+	 public static List<Mon> LayDanhSachMonTheoLop(String tenlop,Session session)
+	 {
+		 List<Mon> ds= null;
+		 try {
+			 
+	    		//ds = session.createQuery("FROM Mon WHERE tenlop =:tenlop").list();
+	    		String hql ="FROM Mon WHERE tenlop =:tenlop";
+	    		Query query = session.createQuery(hql);
+	    		query.setParameter("tenlop",tenlop);
+	    		ds = query.list();
+	    		
+	    	} catch (HibernateException e) {
+	        e.printStackTrace();
+	    	}
+		 
+		
+		return ds;
+		 
+	 }
 	 public static List<Mon> layDanhSachMon() 
 	 {    
+		 SessionFactory factory;
 		 factory = HibernateUtil.getSessionFactory();
 		 Session session = factory.openSession();
 		 List<Mon> ds= null;
@@ -28,6 +50,7 @@ public class MonDAO {
 		return ds;
 	}
 	  public static void listSinhVien() {
+		  SessionFactory factory;
 		  factory = HibernateUtil.getSessionFactory();
 	        Session session = factory.openSession();
 	        try {
@@ -45,11 +68,5 @@ public class MonDAO {
 	  public static void main(String args[])
 	  {
 		
-		  List<Mon> temp = layDanhSachMon() ;
-		  for(int i=0;i<temp.size();i++)
-		  {
-			  System.out.println(" PH: "+ temp.get(i).getPhonghoc());
-		  }
-		 // listSinhVien();
 	  }
 }
