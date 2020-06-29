@@ -14,13 +14,25 @@ public class BangDiem implements java.io.Serializable{
 	private float diemtong;
 	private SinhVien sinhVien;
 	private Mon mon;
-	
+	BangDiem(){}
 	BangDiem(String mssv,String hoten,String tenlop, String mamon)
 	{
 		this.mssv=mssv;
 		this.hoten = hoten;
 		this.tenlop = tenlop;
 		this.mamon = mamon;
+	}
+	
+	BangDiem(String mssv,String hoten,String tenlop, String mamon,float diemgk,float diemck, float diemkhac,float diemtong)
+	{
+		this.mssv=mssv;
+		this.hoten = hoten;
+		this.tenlop = tenlop;
+		this.mamon = mamon;
+		this.diemgk= diemgk;
+		this.diemck=diemck;
+		this.diemkhac=diemkhac;
+		this.diemtong = diemtong;
 	}
 	
 	public String getMssv() {

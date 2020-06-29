@@ -11,7 +11,11 @@ public class JDBC
 {
 	static Connection con = null;
 	static Statement st;
-	public static void ImportDSSV( String Link, String TenLop)// Giao Vu nhap ten lop truoc
+	public static void ImportBangDiem(String link, String TenLop, String mamon)
+	{
+		
+	}
+	public static String ImportDSSV( String Link, String TenLop)// Giao Vu nhap ten lop truoc
 	{
 		
 		try {
@@ -35,9 +39,11 @@ public class JDBC
 			st.execute("update SinhVien\r\n" + 
 					"set MK = MSSV\r\n" + 
 					"where MK is null;");
+			return "succeed";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return e.toString();
 		}
 		
 	}
@@ -160,6 +166,17 @@ public class JDBC
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		};
+	}
+	public static void JDBC()
+	{
+		try {
+		Connect();
+		}
+		catch(Exception ex) {
+			System.out.println("connection fail"); 
+			CreateDB();
+		}
+		
 	}
 	public static void main(String args[]) 
 	{

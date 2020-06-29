@@ -14,6 +14,59 @@ import util.HibernateUtil;
 
 public class BangDiemDAO {
 	private static SessionFactory factory;
+	
+	public static List<String> LayDSLop()
+	{
+		factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 List<String> ds= null;
+	   	try {
+	   		Query query = session.createQuery("SELECT DISTINCT tenlop FROM BangDiem B");
+	   	 ds=query.list();
+	   	} catch (HibernateException e) {
+	       e.printStackTrace(); 
+	   	} finally {
+	       session.close();
+	   	}
+		
+		return ds;
+		
+	}
+	public static String[][] XemDiemSV(String MSSV)
+	{
+		String rt[][] = null;
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 List<BangDiem> ds= null;
+	   	try {
+	   		Query query = session.createQuery("FROM BangDiem B WHERE B.mssv =:MSSV ");
+	   	 query.setString("MSSV", MSSV);
+	   	 ds=query.list();
+	   	} catch (HibernateException e) {
+	       e.printStackTrace(); 
+	   	} finally {
+	       session.close();
+	   	}
+	
+	   	
+	   	rt = new String [ds.size()][8];
+	   	for(int i=0;i<ds.size();i++)
+	   	{
+	   		System.out.println(ds.get(i).getMssv());
+	   		rt[i][0]=ds.get(i).getMssv();
+	   	
+	   		rt[i][1]=ds.get(i).getHoten();
+	   		rt[i][2]=ds.get(i).getTenlop();
+	   		rt[i][3]=ds.get(i).getMamon();
+	   		rt[i][4]=Float.toString(ds.get(i).getDiemgk());
+	   		rt[i][5]=Float.toString(ds.get(i).getDiemck());
+	   		rt[i][6]=Float.toString(ds.get(i).getDiemkhac());
+	   		rt[i][7]=Float.toString(ds.get(i).getDiemtong());
+	   	}
+		return rt;
+		
+	}
+	
 	public static void DangKiMon(SinhVien sv, Mon mon, Session session,Transaction transaction)
 	{
 		BangDiem temp = new BangDiem(sv.getMssv(),sv.getHoten() ,mon.getTenlop(), mon.getMamon());
@@ -94,20 +147,8 @@ public class BangDiemDAO {
 	 public static void main(String args[])
 	  {
 		
-		 factory = HibernateUtil.getSessionFactory();
-		 Session session = factory.openSession();
-		 BangDiem temp = new BangDiem("1742001","Nguyễn Văn A","17HCB","CTT013");
-			Transaction transaction = null; 
-			try {
-			transaction = session.beginTransaction();
-			session.save(temp);
-			transaction.commit();
-			}
-			catch (HibernateException ex)
-			{
-				 transaction.rollback();         
-				 System.err.println(ex);
-			}
+		 List<BangDiem > ds =layDanhBangDiem() ;
+			
 		 // listSinhVien();
 	  }
 }

@@ -8,12 +8,41 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import BangDiem.BangDiem;
 import SinhVien.SinhVien;
 import util.HibernateUtil;
 
 public class MonDAO {
 	//private static SessionFactory factory;
-	
+	public static String[][] LayTKB(String tenlop)
+	{
+		SessionFactory factory;
+		String rt[][] = null;
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 List<Mon> ds= null;
+	   	try {
+	   		Query query = session.createQuery("FROM Mon B WHERE B.tenlop =:tenlop ");
+	   	 query.setString("tenlop", tenlop);
+	   	 ds=query.list();
+	   	} catch (HibernateException e) {
+	       e.printStackTrace(); 
+	   	} finally {
+	       session.close();
+	   	}
+		
+	 	rt = new String [ds.size()][3];
+	   	for(int i=0;i<ds.size();i++)
+	   	{
+	   		//System.out.println(ds.get(i).getMssv());
+	   		//rt[i][0]=ds.get(i).getTenlop();
+	   		rt[i][0] = ds.get(i).getMamon();
+	   		rt[i][1] = ds.get(i).getTenmon();
+	   		rt[i][2] = ds.get(i).getPhonghoc();
+	   		
+	   	}
+	   	return rt;
+	}
 	 public static List<Mon> LayDanhSachMonTheoLop(String tenlop,Session session)
 	 {
 		 List<Mon> ds= null;

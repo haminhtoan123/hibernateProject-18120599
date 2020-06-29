@@ -22,8 +22,9 @@ public class SinhVien   implements java.io.Serializable {
 	{
 		this.mssv=mSSV;
 	}
-	public SinhVien(String mssv, String hoten, String gioitinh, String cmnd )
+	public SinhVien(String tenlop,String mssv, String hoten, String gioitinh, String cmnd )
 	{
+		this.tenlop = tenlop;
 		this.mssv=mssv;
 		this.hoten = hoten;
 		this.gioitinh = gioitinh;
@@ -66,5 +67,8 @@ public class SinhVien   implements java.io.Serializable {
 		this.mk = mk;
 	}
 
-	
+	public void print()
+	{
+		System.out.println(mssv + " : " + tenlop + "  :  " + hoten +"  :  "+ gioitinh +"  :  " +cmnd);
+	}
 }

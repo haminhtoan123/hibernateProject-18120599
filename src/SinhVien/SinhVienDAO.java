@@ -15,9 +15,39 @@ import util.HibernateUtil;
 
 public class SinhVienDAO {
 	 private static SessionFactory factory;
-	 
-	 public static List<SinhVien> LayDanhSachSinhVienTheoLop(String tenlop,Session session)
+	 public static String[][] LayDSSVTheoLop(String tenlop)
 	 {
+
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 List<SinhVien> ds= null;
+		 try {
+			 
+	    		//ds = session.createQuery("FROM Mon WHERE tenlop =:tenlop").list();
+	    		String hql ="FROM SinhVien WHERE tenlop =:tenlop";
+	    		Query query = session.createQuery(hql);
+	    		query.setParameter("tenlop",tenlop);
+	    		ds = query.list();
+	    		
+	    	} catch (HibernateException e) {
+	        e.printStackTrace();
+	    	}
+		 
+		 String rt[][] = new String[ds.size()][4];
+		 for(int i=0; i<ds.size();i++)
+		 {
+			 rt[i][0] = ds.get(i).getMssv();
+			 rt[i][1] = ds.get(i).getHoten();
+			 rt[i][2] = ds.get(i).getGioitinh();
+			 rt[i][3] = ds.get(i).getCmnd();
+		 }
+		return rt;
+		 
+	 }
+	 public static List<SinhVien> LayDanhSachSinhVienTheoLop(String tenlop)
+	 {
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
 		 List<SinhVien> ds= null;
 		 try {
 			 
@@ -34,19 +64,45 @@ public class SinhVienDAO {
 		
 		return ds;
 	 }
-	 public static boolean ThemSinhVien(SinhVien sv, Session session,Transaction transaction)
+	 public static String ThemSinhVien(SinhVien sv)
 	 {
 			//if(1) {};-> catch except
-			try {
-				transaction = session.beginTransaction(); 
-				session.save(sv);
-				transaction.commit();
-			}catch(HibernateException ex)
-			{
-				 transaction.rollback();       
-				 System.err.println(ex); 
-			}
-		return true;
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 
+		 String hql1= "SELECT DISTINCT tenlop FROM SinhVien S ";
+		 Query query  = session.createQuery(hql1);
+		 List <String> dslop = query.list();
+		 if(dslop.contains(sv.getTenlop()))
+		 {
+			 String hql = "SELECT mssv FROM SinhVien S ";
+		        query = session.createQuery(hql);
+		      //  long SL = (long) query.uniqueResult() ;
+		        List<String> ds = query.list();
+		        
+		        if(!ds.contains(sv.getMssv()))
+		        {
+		        	  
+		   		 Transaction transaction= null ;
+		   			try {
+		   				transaction = session.beginTransaction(); 
+		   				
+		   				session.save(sv);
+		   				transaction.commit();
+		   				session.close();
+		   			}catch(HibernateException ex)
+		   			{
+		   				 transaction.rollback();       
+		   				 System.err.println(ex); 
+		   				 return "Lỗi hệ thống";
+		   			}
+		   		return "Thành Công";
+		        }
+		        else
+		        	return "Sinh Viên đẫ tồn tại trong Lớp";
+		 }
+		 else return "Lớp Không tồn tại!!!";
+	  
 		 
 	 }
 	 public static List<SinhVien> layDanhSachSinhVien() 
