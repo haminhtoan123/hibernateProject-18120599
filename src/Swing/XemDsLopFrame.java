@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import BangDiem.BangDiemDAO;
 import Mon.MonDAO;
@@ -25,8 +26,11 @@ import SinhVien.SinhVienDAO;
 public class XemDsLopFrame extends JFrame {
 
 	private JPanel contentPane;
-	JComboBox comboBox ;
-	JTable table;
+	private JComboBox comboBox ;
+	private SimpleTableModel model;
+	private JTable table;
+	private JScrollPane scrollPane;
+	//JTable table;
 	/**
 	 * Launch the application.
 	 */
@@ -57,7 +61,7 @@ public class XemDsLopFrame extends JFrame {
 	                e.getWindow().dispose();
 	            }
 	        });
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new  FlowLayout());
@@ -71,7 +75,7 @@ public class XemDsLopFrame extends JFrame {
 		comboBox = new JComboBox(new DefaultComboBoxModel<String>(BangDiemDAO.LayDSLop().toArray(new String[0])));
 		//comboBox.setBounds(133, 55, 72, 22);
 		contentPane.add(comboBox);
-	
+
 		
 		JButton btnNewButton = new JButton("Xem");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -80,18 +84,29 @@ public class XemDsLopFrame extends JFrame {
 			}
 		});
 		contentPane.add(btnNewButton);
+		String columns[]= {"MSSV","Họ Tên","Giới Tính","CMND"};
+		String Data[][] = SinhVienDAO.LayDSSVTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
+		model = new SimpleTableModel(Data,columns);
+		
+		//System.out.println(model.Data[0][0]);
+		table = new JTable(model);
+		 scrollPane = new JScrollPane();
+		scrollPane.setViewportView(table);
+		
+
+		contentPane.add(scrollPane);
 	}
 	private void xemActionPerformed(ActionEvent e)
 	{
-		String columns[]= {"MSSV","Họ Tên","Giới Tính","CMND"};
-		String Data[][] = SinhVienDAO.LayDSSVTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
-		System.out.println(Data[0][0]+ " : " +Data[0][1]+ " : " + Data[0][2]);
-
-		table = new JTable(Data,columns);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(table);
+	
+		//System.out.println(Data[0][0]+ " : " +Data[0][1]+ " : " + Data[0][2]);
+		//table.removeAll();
+		//table.setModel(temp);
+		
+		model.update(SinhVienDAO.LayDSSVTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString()));
+	
 	//	scrollPane.setBounds(27, 394, 505, -285);
-		contentPane.add(scrollPane);
+	
 	    contentPane.revalidate();
 	    contentPane.repaint();
 	}

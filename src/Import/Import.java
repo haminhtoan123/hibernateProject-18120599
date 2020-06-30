@@ -24,7 +24,9 @@ public class Import {
 	public static String ImportTKB(String link)// import final
 	{
 		try {
+			JDBC.Connect();
 		JDBC.ImportTKB(link);
+		JDBC.Close();
 		//JDBC.Close();
 		// - > lay ra sinh vien cua lop do
 		
@@ -40,8 +42,14 @@ public class Import {
         String TenLopVuaThem=  (String) query.uniqueResult();
 		System.out.println(TenLopVuaThem);// Lop cua mon
 		
-		List <Mon> MonVuaThem = MonDAO.LayDanhSachMonTheoLop(TenLopVuaThem, session);
+		//List <Mon> MonVuaThem = MonDAO.LayDanhSachMonTheoLop(TenLopVuaThem);
+		
+		String hql2 ="FROM Mon WHERE tenlop =:tenlop";
+		Query query2 = session.createQuery(hql2);
+		query2.setParameter("tenlop",TenLopVuaThem);
+		List <Mon> MonVuaThem= query2.list();
 		System.out.println(MonVuaThem.size());
+		
 	
 		 List<SinhVien> ds= SinhVienDAO.LayDanhSachSinhVienTheoLop(TenLopVuaThem);// ds lop cua TKB vua them
 		 
@@ -59,6 +67,8 @@ public class Import {
 	    }
 		catch(Exception e)
 		{
+			
+			System.out.println(e.getMessage());
 			return "Lỗi Hệ thống";
 		}
 	}

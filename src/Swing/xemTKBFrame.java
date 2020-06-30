@@ -29,6 +29,8 @@ public class xemTKBFrame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	JComboBox comboBox ;
+	private SimpleTableModel model;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -82,21 +84,27 @@ public class xemTKBFrame extends JFrame {
 			}
 		});
 		contentPane.add(btnNewButton);
+
+		String columns[]= {"Mã Môn","Tên Môn","Phòng Học"};
+		String Data[][] = MonDAO.LayTKB(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
+		model = new SimpleTableModel(Data,columns);
+		
+		//System.out.println(model.Data[0][0]);
+		table = new JTable(model);
+		 scrollPane = new JScrollPane();
+		scrollPane.setViewportView(table);
+		
+
+		contentPane.add(scrollPane);
 	//	btnNewButton.setBounds(246, 54, 97, 25);
 		
 	}
 	private void xemActionPerformed(ActionEvent e)
 	{
-		
-		String columns[]= {"Mã Môn","Tên Môn","Phòng Học"};
-		String Data[][] = MonDAO.LayTKB(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
-		System.out.println(Data[0][0]+ " : " +Data[0][1]+ " : " + Data[0][2]);
+		model.update(MonDAO.LayTKB(comboBox.getItemAt(comboBox.getSelectedIndex()).toString()));
+	
 
-		table = new JTable(Data,columns);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setViewportView(table);
-	//	scrollPane.setBounds(27, 394, 505, -285);
-		contentPane.add(scrollPane);
+		
 	    contentPane.revalidate();
 	    contentPane.repaint();
 	    

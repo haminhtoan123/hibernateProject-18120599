@@ -17,7 +17,7 @@ public class JDBC
 	}
 	public static String ImportDSSV( String Link, String TenLop)// Giao Vu nhap ten lop truoc
 	{
-		
+		Connect();
 		try {
 
 			st.execute(
@@ -39,10 +39,12 @@ public class JDBC
 			st.execute("update SinhVien\r\n" + 
 					"set MK = MSSV\r\n" + 
 					"where MK is null;");
+			Close();
 			return "succeed";
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Close();
 			return e.toString();
 		}
 		

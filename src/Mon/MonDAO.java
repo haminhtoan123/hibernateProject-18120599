@@ -2,6 +2,7 @@ package Mon;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -43,8 +44,26 @@ public class MonDAO {
 	   	}
 	   	return rt;
 	}
-	 public static List<Mon> LayDanhSachMonTheoLop(String tenlop,Session session)
+	
+	 public static List<String> ListMonToString(List<Mon> ls)// Lay Ma mon
 	 {
+		 List<String> ds = new Vector();
+		 
+		 for(int i=0;i<ls.size();i++)
+		 {
+			 ds.add(ls.get(i).getMamon());
+		 }
+		 return ds;
+		 
+	 }
+	 public static List<Mon> LayDanhSachMonTheoLop(String tenlop)
+	 {	
+			
+		 SessionFactory factory;
+		
+		 factory = HibernateUtil.getSessionFactory();
+		 
+		 Session session = factory.openSession();
 		 List<Mon> ds= null;
 		 try {
 			 
@@ -58,10 +77,11 @@ public class MonDAO {
 	        e.printStackTrace();
 	    	}
 		 
-		
+		//session.close();
 		return ds;
 		 
 	 }
+	 
 	 public static List<Mon> layDanhSachMon() 
 	 {    
 		 SessionFactory factory;

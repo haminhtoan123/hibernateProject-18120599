@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.MalformedURLException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -19,6 +20,7 @@ public class ImportTKBFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel statusLabel;
+	private String URL;
 	/**
 	 * Launch the application.
 	 */
@@ -62,18 +64,20 @@ public class ImportTKBFrame extends JFrame {
 	        JButton showFileDialogButton = new JButton("Open File");
 	        showFileDialogButton.setBounds(280, 50, 87, 25);
 	        getContentPane().add(showFileDialogButton);
-	        
+	   /*     
 	        JLabel lblNewLabel = new JLabel("Nhập Tên lớp");
 	        lblNewLabel.setBounds(0, 59, 85, 16);
 	        getContentPane().add(lblNewLabel);
-	        
-	        TextField textField = new TextField();
-	        textField.setBounds(94, 54, 143, 24);
-	        getContentPane().add(textField);
+	        */
+//	        URL = new TextField();
+//	        URL.setBounds(94, 54, 143, 24);
+//	        getContentPane().add(URL);
 	        
 	        JButton btnNewButton_1 = new JButton("Import");
 	        btnNewButton_1.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
+	        		
+	        		importActionPerformed( e);
 	        	}
 	        });
 	        btnNewButton_1.setBounds(150, 84, 129, 43);
@@ -84,14 +88,35 @@ public class ImportTKBFrame extends JFrame {
 	                int returnVal = fileDialog.showOpenDialog(ImportTKBFrame.this);
 	                if (returnVal == JFileChooser.APPROVE_OPTION) {
 	                    java.io.File file = fileDialog.getSelectedFile();
+	                    try {
+							URL = file.toURL().toString();
+						} catch (MalformedURLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 	                   // Import.JDBC.ImportDSSV(file.toURI().toString(), textField.getText());
-	                    System.out.println(file.toURI().toString());
-	                   statusLabel.setText( Import.Import.ImportTKB(file.toURI().toString()));
+	                  //  System.out.println(file.toURI().toString());
+	                 //  statusLabel.setText( Import.Import.ImportTKB(file.toURI().toString()));
 	                } else {
 	                    statusLabel.setText("Open command cancelled by user.");
 	                }
 	            }
 	        });
+	}
+	private void importActionPerformed(ActionEvent e)
+	{
+
+		 if(URL.equals("")) statusLabel.setText("Chưa Open file");
+		 else
+		 {
+			 URL = URL.substring(6, URL.length());
+			 System.out.println(URL);
+             statusLabel.setText( Import.Import.ImportTKB(URL));
+		 }
+	/*	 if(tenLop.getText().equals(""))
+		 statusLabel.setText("Nhập Tên Lớp!!!");*/
+		 
+		
 	}
 
 }

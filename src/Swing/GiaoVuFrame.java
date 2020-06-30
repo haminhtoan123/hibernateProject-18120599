@@ -70,7 +70,7 @@ public class GiaoVuFrame extends JFrame {
 		btnNewButton_2.setBounds(306, 38, 205, 57);
 		contentPane.add(btnNewButton_2);
 		
-		JButton btnNewButton_3 = new JButton("Xử lí Danh Sách Lớp");
+		JButton btnNewButton_3 = new JButton("Xử lí Trên Danh Sách Lớp");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//xuLiActionPerformed(event)
@@ -109,7 +109,7 @@ public class GiaoVuFrame extends JFrame {
 		JButton btnNewButton_7 = new JButton("Xem Bảng Điểm");// bao gom sua diem
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//xemBDActionPerformed(e)
+				xemBDActionPerformed(e);
 			}
 		});
 		btnNewButton_7.setBounds(306, 251, 205, 57);
@@ -140,5 +140,10 @@ public class GiaoVuFrame extends JFrame {
 	{
 		ImportTKBFrame itkb= new ImportTKBFrame();
 		itkb.setVisible(true);
+	}
+	private void xemBDActionPerformed(ActionEvent event)
+	{
+		xemBDFrame xbd= new xemBDFrame();
+		xbd.setVisible(true);
 	}
 }

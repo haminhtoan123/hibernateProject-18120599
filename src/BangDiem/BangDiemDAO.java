@@ -32,6 +32,39 @@ public class BangDiemDAO {
 		return ds;
 		
 	}
+	public static String[][] LayDanhSachDiem(String tenlop,String mamon)
+	{
+		String rt[][] = null;
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 List<BangDiem> ds= null;
+	   	try {
+	   		Query query = session.createQuery("FROM BangDiem B WHERE B.tenlop =:tenlop AND B.mamon =:mamon");
+	   	 query.setString("tenlop", tenlop);
+	   	 query.setString("mamon", mamon);
+	   	 ds=query.list();
+	   	} catch (HibernateException e) {
+	       e.printStackTrace(); 
+	   	} finally {
+	       session.close();
+	   	}
+	
+	   	
+	   	rt = new String [ds.size()][6];
+	   	for(int i=0;i<ds.size();i++)
+	   	{
+	   		System.out.println(ds.get(i).getMssv());
+	   		rt[i][0]=ds.get(i).getMssv();
+	   	
+	   		rt[i][1]=ds.get(i).getHoten();
+	   		rt[i][2]=Float.toString(ds.get(i).getDiemgk());
+	   		rt[i][3]=Float.toString(ds.get(i).getDiemck());
+	   		rt[i][4]=Float.toString(ds.get(i).getDiemkhac());
+	   		rt[i][5]=Float.toString(ds.get(i).getDiemtong());
+	   	}
+		return rt;
+		
+	}
 	public static String[][] XemDiemSV(String MSSV)
 	{
 		String rt[][] = null;

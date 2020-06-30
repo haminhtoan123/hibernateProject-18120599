@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.MalformedURLException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -23,7 +24,8 @@ public class ImportDSSVFrame extends JFrame {
    // private JFrame mainFrame;
     //private JLabel headerLabel;
     private JLabel statusLabel;
-
+    private String URL;
+    TextField tenLop;
 	/**
 	 * Launch the application.
 	 */
@@ -65,13 +67,14 @@ public class ImportDSSVFrame extends JFrame {
 	        lblNewLabel.setBounds(0, 59, 85, 16);
 	        getContentPane().add(lblNewLabel);
 	        
-	        TextField textField = new TextField();
-	        textField.setBounds(94, 54, 143, 24);
-	        getContentPane().add(textField);
+	        tenLop = new TextField();
+	        tenLop.setBounds(94, 54, 143, 24);
+	        getContentPane().add(tenLop);
 	        
 	        JButton btnNewButton_1 = new JButton("Import");
 	        btnNewButton_1.addActionListener(new ActionListener() {
 	        	public void actionPerformed(ActionEvent e) {
+	        		importActionPerformed(e);
 	        	}
 	        });
 	        btnNewButton_1.setBounds(150, 84, 129, 43);
@@ -83,8 +86,13 @@ public class ImportDSSVFrame extends JFrame {
 	                if (returnVal == JFileChooser.APPROVE_OPTION) {
 	                    java.io.File file = fileDialog.getSelectedFile();
 	                   // Import.JDBC.ImportDSSV(file.toURI().toString(), textField.getText());
-	      
-	                    statusLabel.setText( Import.JDBC.ImportDSSV(file.toURI().toString(), textField.getText()));
+	                    try {
+							URL = file.toURL().toString();
+						} catch (MalformedURLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+	                   statusLabel.setText( "Đang mở : "+ file.getName());
 	                } else {
 	                    statusLabel.setText("Open command cancelled by user.");
 	                }
@@ -92,4 +100,24 @@ public class ImportDSSVFrame extends JFrame {
 	        });
 	        
 	}
+	 private void importActionPerformed(ActionEvent e)
+	 {
+		//  int returnVal = fileDialog.showOpenDialog(ImportDSSVFrame.this);
+         // if (returnVal == JFileChooser.APPROVE_OPTION) {
+           //   java.io.File file = fileDialog.getSelectedFile();
+             // Import.JDBC.ImportDSSV(file.toURI().toString(), textField.getText());
+		// System.out.println(tenLop.getText());
+
+
+		 if(URL.equals("")) statusLabel.setText("Chưa Open file");
+		 
+		 URL = URL.substring(6, URL.length());
+		 System.out.println(URL);
+		 if(tenLop.getText().equals(""))
+		 statusLabel.setText("Nhập Tên Lớp!!!");
+		 
+		 else
+              statusLabel.setText( Import.JDBC.ImportDSSV(URL, tenLop.getText()));
+        
+	 }
 }
