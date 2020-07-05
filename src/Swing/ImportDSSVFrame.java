@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextPane;
 import java.awt.TextField;
 
@@ -59,6 +61,10 @@ public class ImportDSSVFrame extends JFrame {
 	        setVisible(true);
 	       // headerLabel.setText("Control in action: JFileChooser");
 	        final JFileChooser fileDialog = new JFileChooser();
+	        FileFilter filter = new FileNameExtensionFilter("CSV document (*.csv)", "csv");
+	        //fileDialog.addChoosableFileFilter(filter);
+	        fileDialog.setFileFilter(filter);
+	        fileDialog.setMultiSelectionEnabled(false);
 	        JButton showFileDialogButton = new JButton("Open File");
 	        showFileDialogButton.setBounds(280, 50, 87, 25);
 	        getContentPane().add(showFileDialogButton);

@@ -15,6 +15,57 @@ import util.HibernateUtil;
 
 public class SinhVienDAO {
 	 private static SessionFactory factory;
+	 public static boolean changePass(String MSSV,String mkCu,String mkMoi)
+	 {
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 Transaction transaction = session.beginTransaction();
+		 Query query = session.createQuery("SELECT mk FROM SinhVien WHERE mssv=:MSSV");
+		 query.setString("MSSV", MSSV);
+		 String mk = (String) query.uniqueResult();
+		 if(mkCu.equals(mk))
+		 {
+			 query =session.createQuery("UPDATE SinhVien SET mk=:mkMoi WHERE mssv=:MSSV");
+			 query.setString("MSSV", MSSV);
+			 query.setString("mkMoi", mkMoi);
+			 query.executeUpdate();
+			 transaction.commit();
+			 session.close();
+			 
+			 return true;
+		 }
+		 else
+			 { 
+			 session.close();
+			 return false;
+			 }
+		 
+		
+	 }
+	 public static String LayLopSV(String MSSV)
+	 {
+
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 Query query = session.createQuery("SELECT tenlop FROM SinhVien WHERE  MSSV=:MSSV");
+		 query.setString("MSSV", MSSV);
+		 String rt=(String) query.uniqueResult();
+		 session.close();
+		 return rt;
+	 }
+	 public static boolean CertifyUser(String id,String pass)
+	 {
+		 factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		 Query query = session.createQuery("FROM SinhVien WHERE  MSSV=:id AND mk =:pass");
+		 query.setString("id", id);
+		 query.setString("pass",pass);
+		 if(query.uniqueResult()==null)
+			 
+		 return false;
+		 else
+			 return true;
+	 }
 	 public static String[][] LayDSSVTheoLop(String tenlop)
 	 {
 

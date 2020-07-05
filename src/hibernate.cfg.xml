@@ -25,6 +25,6 @@
  		<mapping resource="Mon/Mon.hbm.xml"/> 
         <mapping resource="BangDiem/BangDiem.hbm.xml"/> 
     <mapping resource="SinhVien/SinhVien.hbm.xml"/> 
-
+	<mapping resource="GiaoVu/GiaoVu.hbm.xml"/> 
     </session-factory>
 </hibernate-configuration>

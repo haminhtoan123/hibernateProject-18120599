@@ -1,5 +1,6 @@
 package Mon;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -15,6 +16,55 @@ import util.HibernateUtil;
 
 public class MonDAO {
 	//private static SessionFactory factory;
+//	public static List<String> LayDSAllLop()
+//	{
+//		List<String> rt = new ArrayList<String>();
+//		SessionFactory factory = HibernateUtil.getSessionFactory();
+//		 Session session = factory.openSession();
+//		 List<Mon> ds= null;
+//	    	try {
+//	    		ds = session.createQuery("FROM Mon").list();
+//	       
+//	    	} catch (HibernateException e) {
+//	        e.printStackTrace();
+//	    	} finally {
+//	        session.close();
+//	    	}
+//	    for(int i=0;i<ds.size();i++)
+//	    {
+//	    	rt.add(ds.get(i).getTenlop() +"-"+ ds.get(i).getMamon());
+//	    }
+//		return rt;
+//	}
+	public static List<String> layMonSVChuaDki(String MSSV)
+	{
+
+		SessionFactory factory = HibernateUtil.getSessionFactory();
+		 Session session = factory.openSession();
+		List<Mon> ds = null;
+		List<String> rt= new ArrayList<String>();
+		try {
+			 
+   		//ds = session.createQuery("FROM Mon WHERE tenlop =:tenlop").list();
+   		String hql ="FROM Mon M WHERE  M.mamon NOT IN(SELECT D.mamon FROM BangDiem D WHERE D.mssv =:MSSV)";
+   		Query query = session.createQuery(hql);
+   		//query.setString("tenlop",tenlop);
+   		query.setString("MSSV",MSSV);
+   		ds = query.list();
+   		if(ds.isEmpty()) return null;
+   	} catch (HibernateException e) {
+       e.printStackTrace();
+       return null;
+   	}
+		System.out.println(ds.size());
+		for(int i=0;i<ds.size();i++)
+		{
+			String temp =ds.get(i).getTenlop()+"-" + ds.get(i).getMamon() ;
+			rt.add(temp);
+		}
+		
+		return rt;
+	}
 	public static String[][] LayTKB(String tenlop)
 	{
 		SessionFactory factory;
@@ -48,7 +98,7 @@ public class MonDAO {
 	 public static List<String> ListMonToString(List<Mon> ls)// Lay Ma mon
 	 {
 		 List<String> ds = new Vector();
-		 
+		 if(ls==null) return null;
 		 for(int i=0;i<ls.size();i++)
 		 {
 			 ds.add(ls.get(i).getMamon());
@@ -75,8 +125,12 @@ public class MonDAO {
 	    		
 	    	} catch (HibernateException e) {
 	        e.printStackTrace();
+	        return null;
 	    	}
-		 
+		 	finally
+		 	{
+		 		session.close();
+		 	}
 		//session.close();
 		return ds;
 		 
@@ -98,24 +152,9 @@ public class MonDAO {
     	}
 		return ds;
 	}
-	  public static void listSinhVien() {
-		  SessionFactory factory;
-		  factory = HibernateUtil.getSessionFactory();
-	        Session session = factory.openSession();
-	        try {
-	            List Mons = session.createQuery("FROM Mon").list();
-	            for (Iterator iterator = Mons.iterator(); iterator.hasNext();) {
-	                Mon mon = (Mon) iterator.next();
-	                System.out.println("Phong hoc: " + mon.getPhonghoc());
-	            }
-	        } catch (HibernateException e) {
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	    }
+	 
 	  public static void main(String args[])
 	  {
-		
+		System.out.println(layMonSVChuaDki("1742001").get(0));
 	  }
 }

@@ -1,6 +1,7 @@
 package Swing;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -15,23 +17,27 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import BangDiem.BangDiem;
 import BangDiem.BangDiemDAO;
+import SinhVien.SinhVienDAO;
 
 
 
 	public class StudentFrame extends JFrame {
 
 		private JPanel contentPane;
-		//private List<String> cols;
-	   // private List<Student> rows;
-	  //  private StudentDaoImpl studentDaoImpl;
+		private JLabel status;
+		private JLabel status_2;
 		private List<BangDiem> rows;
+		private JPasswordField  mkCu;
+		private JPasswordField mkMoi;
 	   // private SimpleTableModel<BangDiem> simpleTableModel;
 	    private JTable jTable;
 		/**
@@ -57,10 +63,10 @@ import BangDiem.BangDiemDAO;
 			setTitle("Hoc Sinh");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setBounds(100, 100, 781, 611);
-			contentPane = new JPanel();
-			contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-			contentPane.setLayout(new BorderLayout(0, 0));
-			setContentPane(contentPane);
+			
+			CardLayout cardLayout=new CardLayout();
+			
+			
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			String columns[]= {"MSSV","Họ Tên", "Tên Lớp","Mã Môn","Điểm Giữa Kì","Điểm Cuối Kì","Điểm Khác", "Điểm Tổng"};
 			//String Data[][] = {{"18120599","HMT","1","2","3","4","5","6"}};
@@ -70,28 +76,37 @@ import BangDiem.BangDiemDAO;
 	        JLabel jLabel = new JLabel();
 	        jLabel.setText("BẢNG ĐIỂM");      
 	        jLabel.setFont(new Font("Lucida Grande", 0, 36)); // NOI18N
-	        jLabel.setHorizontalAlignment(SwingConstants.CENTER);        
-	        getContentPane().add(jLabel, BorderLayout.PAGE_START);
+	        jLabel.setHorizontalAlignment(SwingConstants.CENTER);     
+	        JPanel P1 = new JPanel();
+	        P1.setLayout(new BorderLayout());
+	        P1.setBorder(new EmptyBorder(5, 5, 5, 5));
+	       P1.add(jLabel, BorderLayout.PAGE_START);
 	        JScrollPane jScrollPane = new JScrollPane();
 	        jTable = new JTable(Data,columns);
 
 	        jScrollPane.setViewportView(jTable);
-	        getContentPane().add(jScrollPane, BorderLayout.CENTER);
+	       P1.add(jScrollPane, BorderLayout.CENTER);
 	            
 	        JLabel jLabel2 = new JLabel();
 	        jLabel2.setText("Sinh Viên");
-	        getContentPane().add(jLabel2, BorderLayout.PAGE_END);
+	       P1.add(jLabel2, BorderLayout.PAGE_END);
 	        
 	        JMenuBar jMenuBar = new JMenuBar();
 	        
 	        JMenu file = new JMenu();
 	        file.setText("Lựa Chọn");
-	        	
-	
+	        	JMenuItem Diem = new JMenuItem();
+	        	Diem.addActionListener(new ActionListener() {
+	        		public void actionPerformed(ActionEvent e) {
+	        			cardLayout.first(contentPane);
+	        		}
+	        	});
+	        	Diem.setText("Xem Điểm");
+	        	file.add(Diem);
 	        	JMenuItem ChangePass = new JMenuItem();
 	        	ChangePass.addActionListener(new ActionListener() {
 	        		public void actionPerformed(ActionEvent e) {
-	        			//changePassActionPerformed(e);
+	        			cardLayout.last(contentPane);
 	        		}
 	        	});
 	        	ChangePass.setText("Đổi Mật Khẩu");
@@ -106,67 +121,70 @@ import BangDiem.BangDiemDAO;
 	        		quit.setText("Quit");
 	        		file.add(quit);
 	        jMenuBar.add(file);
-	        
-	    
+	        //
+	    	JPanel P2 = new JPanel();
+			P2.setBorder(new EmptyBorder(5, 5, 5, 5));
+			
+			P2.setLayout(null);
+			
+			mkCu = new JPasswordField ();
+			mkCu.setBounds(134, 62, 116, 22);
+			P2.add(mkCu);
+			mkCu.setColumns(10);
+			
+			JLabel lblNewLabel = new JLabel("Mật Khẩu Cũ");
+			lblNewLabel.setBounds(22, 65, 85, 16);
+			P2.add(lblNewLabel);
+			
+			mkMoi = new JPasswordField ();
+			mkMoi.setBounds(134, 97, 116, 22);
+			P2.add(mkMoi);
+			mkMoi.setColumns(10);
+			
+			JLabel lblNewLabel_1 = new JLabel("Mật Khẩu mới");
+			lblNewLabel_1.setBounds(22, 100, 85, 16);
+			P2.add(lblNewLabel_1);
+			
+			JButton btnNewButton = new JButton("Đổi Mật Khẩu");
+			btnNewButton.setBounds(107, 161, 120, 25);
+			btnNewButton.addActionListener(new ActionListener() {
+        		public void actionPerformed(ActionEvent e) {
+        			 changePassPerformed(e,MSSV);
+        		}
+        	});
+
+			P2.add(btnNewButton);
+			
+			status = new JLabel();
+			status.setBounds(262, 65, 134, 16);
+			status_2 = new JLabel();
+			status_2.setBounds( 130, 200, 134, 16);
+			P2.add(status);
+			P2.add(status_2);
+			//
+			contentPane = new JPanel();
+	        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPane.setLayout(cardLayout);
+	        contentPane.add(P1);
+	        contentPane.add(P2);
+			setContentPane(contentPane);
+	
 	        setJMenuBar(jMenuBar);  
 	        pack();
 		}
 		
-		
-//		 private void insertStudentActionPerformed(ActionEvent evt) {
-//		     new InsertStudentJFrame().setVisible(true);
-//		 }
-//
-//		 private void refreshActionPerformed(ActionEvent evt) {
-//			 rows=studentDaoImpl.getAllStudent();
-//		     simpleTableModel.setRows(rows);
-//		     simpleTableModel.fireTableDataChanged();
-//		 }
-//		 
-//		 private void updateStudentActionPerformed(ActionEvent evt) {
-//			 try {
-//				 	rows=studentDaoImpl.getAllStudent();
-//				 	simpleTableModel.setRows(rows);
-//					Student student=rows.get(jTable.getSelectedRow());
-//					new UpdateStudentJFrame(student).setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					JOptionPane.showMessageDialog(this, "请选中具体学生...","更新学生信息",JOptionPane.ERROR_MESSAGE);
-//			}    	             
-//		 }
-//		 
-//		 private void queryByIDActionPerformed(ActionEvent evt) {
-//			 rows=studentDaoImpl.getAllStudent();
-//		     simpleTableModel.setRows(rows);
-//			 new QueryByIDJFrame(jTable).setVisible(true);
-//		 }
-//		 
-//		 private void delStudentActionPerformed(ActionEvent actionEvent) {		 
-//		     try {
-//				Student student=rows.get(jTable.getSelectedRow());
-//				studentDaoImpl.delStudentbyID(student.getSid());
-//				rows=studentDaoImpl.getAllStudent();
-//			    simpleTableModel.setRows(rows);
-//			    simpleTableModel.fireTableDataChanged();
-//			    JOptionPane.showMessageDialog(this, "删除成功", "删除学生信息", JOptionPane.INFORMATION_MESSAGE);
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//				JOptionPane.showMessageDialog(this, "删除失败!请选中学生...", "删除学生信息", JOptionPane.ERROR_MESSAGE);
-//			}
-//		 }
-//		 
+	
 		 private void quitActionPerformed(ActionEvent actionEvent) {
 			 this.setVisible(false);
 			 this.dispose();
 		 }
-		 private void changePassPerformed(ActionEvent actionEvent) {
-			 this.setVisible(false);
-			 this.dispose();
+		 private void changePassPerformed(ActionEvent actionEvent,String MSSV) {
+			 if(SinhVienDAO.changePass(MSSV, mkCu.getText(), mkMoi.getText()))
+			 {
+				 status.setText("");
+				 status_2.setText("Thành Công");
+			 }
+			 else status.setText("Sai Mật Khẩu!");
 		 }
-//		 private void queryAllActionPerformed(ActionEvent actionEvent) {
-//			 rows=studentDaoImpl.getAllStudent();
-//		     simpleTableModel.setRows(rows);
-//		     simpleTableModel.fireTableDataChanged();
-//		 }
 	}
 

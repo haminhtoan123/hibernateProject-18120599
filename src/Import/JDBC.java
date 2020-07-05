@@ -11,9 +11,52 @@ public class JDBC
 {
 	static Connection con = null;
 	static Statement st;
-	public static void ImportBangDiem(String link, String TenLop, String mamon)
+	public static String ImportBangDiem(String link)
 	{
-		
+		Connect();
+		try
+		{
+			st.execute("CREATE TABLE #TEMP(\r\n" + 
+					"	\r\n" + 
+					"	MSSV varchar(10),\r\n" + 
+					"	HoTen nvarchar(50),\r\n" + 
+					"	TenLop varchar(10),\r\n" + 
+					"	MaMon varchar(10),\r\n" + 
+					"	DiemGK float,\r\n" + 
+					"	DiemCK float,\r\n" + 
+					"	DiemKhac float,\r\n" + 
+					"	DiemTong float\r\n" + 
+					")");
+			st.execute("\r\n" + 
+					"BULK\r\n" + 
+					"INSERT #TEMP\r\n" + 
+					"from '"+link+"'\r\n" + 
+					"with\r\n" + 
+					"(\r\n" + 
+					"	FORMAT = 'CSV',\r\n" + 
+					"	FIRSTROW =2,\r\n" + 
+					"	 FIELDTERMINATOR = ',',  --CSV field delimiter\r\n" + 
+					"    ROWTERMINATOR = '\\n',   --Use to shift the control to next row\r\n" + 
+					"    TABLOCK\r\n" + 
+					")");
+			st.execute("UPDATE  BangDiem\r\n" + 
+					"SET DiemGK = #TEMP.DiemGK,\r\n" + 
+					"DiemCK =#TEMP.DiemCK,\r\n" + 
+					"DiemKhac =#TEMP.DiemKhac,\r\n" + 
+					"DiemTong=#TEMP.DiemTong\r\n" + 
+					"from #TEMP\r\n" + 
+					"where BangDiem.MSSV = #TEMP.MSSV\r\n" + 
+					"and BangDiem.Tenlop = #TEMP.TenLop\r\n" + 
+					"and BangDiem.Mamon = #TEMP.MaMon");
+			Close();
+			return "Thành Công";
+		}
+	 catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		Close();
+		return e.toString();
+	 }
 	}
 	public static String ImportDSSV( String Link, String TenLop)// Giao Vu nhap ten lop truoc
 	{
@@ -136,6 +179,7 @@ public class JDBC
 				"as \r\n" + 
 				"select  TenLop,MaMon,TenMon,PhongHoc\r\n" + 
 				"from Mon ");
+		st.execute("INSERT INTO GiaoVu(id,MK) values('GIAOVU','GIAOVU')");
 		//con.close();
 		}
 		catch(Exception ex){

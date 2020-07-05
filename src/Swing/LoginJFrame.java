@@ -7,7 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
+import GiaoVu.GiaoVuDAO;
+import SinhVien.SinhVienDAO;
 
 import java.awt.CardLayout;
 import java.awt.Event;
@@ -42,7 +43,7 @@ public class LoginJFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public LoginJFrame() {
-		setTitle("Quản Lý Sanh Diên");
+		setTitle("Quản Lý Sinh Viên");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		CardLayout cardLayout=new CardLayout();
@@ -69,12 +70,13 @@ public class LoginJFrame extends JFrame {
 		});
 		landingOptions.add(userOption);
 		
-		///???
+		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(cardLayout);
-		//??? 
+
 		JPanel userPanel = new JPanel();
 		contentPane.add(userPanel, "name_5600414879778");
 		userPanel.setLayout(null);
@@ -96,15 +98,7 @@ public class LoginJFrame extends JFrame {
 		});
 		userButton1.setBounds(150, 159, 100, 23);
 		userPanel.add(userButton1);
-		// ->
-//		JButton userButton2 = new JButton("DANG KI");
-//		userButton2.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent event) {
-//				//userRegisterActionPerformed(event);
-//			}
-//		});
-		//userButton2.setBounds(220, 159, 93, 23);
-		//userPanel.add(userButton2);
+
 		
 		JLabel lbll = new JLabel("Tài Khoản");//ID
 		lbll.setBounds(72, 58, 65, 15);
@@ -115,7 +109,7 @@ public class LoginJFrame extends JFrame {
 		userPanel.add(label);
 		
 		JPanel adminPanel = new JPanel();
-		contentPane.add(adminPanel, "??????????????");
+		contentPane.add(adminPanel);
 		adminPanel.setLayout(null);
 		
 		adminName = new JTextField();
@@ -134,7 +128,7 @@ public class LoginJFrame extends JFrame {
 				adminLoginActionPerformed(event);
 			}
 		});
-		adminButton.setBounds(152, 151, 93, 23);
+		adminButton.setBounds(152, 151, 100, 23);
 		adminPanel.add(adminButton);
 		
 		JLabel lblNewLabel = new JLabel("Tài Khoản");
@@ -161,50 +155,32 @@ public class LoginJFrame extends JFrame {
 	private void userLoginActionPerformed(ActionEvent event) {
 		 String uname=userName.getText();
 	     String upassword=userPassword.getText();
-	        //UserDaoImpl userDaoImpl=new UserDaoImpl();
-	        //if(userDaoImpl.certifyUser(uname, upassword)) -> xu li dang nhap
-	       // {
-	            //JOptionPane.showMessageDialog(this, "登录成功");
+	       if(SinhVienDAO.CertifyUser(uname, upassword)) {
+	    	   JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công");
 	            StudentFrame studentJFrame=new StudentFrame(uname);
 	            studentJFrame.setBounds(600, 400, 800, 600);
 	            studentJFrame.setVisible(true);
 	            this.setVisible(false);
 	            this.dispose();
-	       // }
-	     //   else
-	       // {
-	       //     JOptionPane.showMessageDialog(this, "登录失败，账号或密码错误！","登陆学生管理系统",JOptionPane.ERROR_MESSAGE);
-	       // }
+	      }
+	       else JOptionPane.showMessageDialog(this, "Sai Mật Khẩu Hoặc Tài Khoản","Thông Báo",JOptionPane.ERROR_MESSAGE);
+	    
 	}
 	private void adminLoginActionPerformed(ActionEvent event) {
-		 String uname=userName.getText();
-	     String upassword=userPassword.getText();
-	        //UserDaoImpl userDaoImpl=new UserDaoImpl();
-	        //if(userDaoImpl.certifyUser(uname, upassword)) -> xu li dang nhap
-	       // {
-	            //JOptionPane.showMessageDialog(this, "登录成功");
+		 String N=adminName.getText();
+	     String P=adminPassword.getText();
+	     if(GiaoVuDAO.CertifyUser(N, P)) {
+	    	 JOptionPane.showMessageDialog(this, "Đăng Nhập Thành Công");
 	            GiaoVuFrame giaovuFrame =new GiaoVuFrame();
 	            giaovuFrame.setBounds(600, 400, 800, 600);
 	            giaovuFrame.setVisible(true);
 	            this.setVisible(false);
 	            this.dispose();
-	       // }
-	     //   else
-	       // {
-	       //     JOptionPane.showMessageDialog(this, "登录失败，账号或密码错误！","登陆学生管理系统",JOptionPane.ERROR_MESSAGE);
-	       // }
+	          }
+	     else JOptionPane.showMessageDialog(this, "Sai Mật Khẩu Hoặc Tài Khoản","Thông Báo",JOptionPane.ERROR_MESSAGE);
+	    	 
+	   
 	}
-//	private void userRegisterActionPerformed(ActionEvent event) {
-//		String uname=userName.getText();
-//	     String upassword=userPassword.getText();
-//	     User user=new User(uname,upassword);
-//	     UserDaoImpl userDaoImpl=new UserDaoImpl();
-//	     if(userDaoImpl.addUser(user)) {
-//	    	 JOptionPane.showMessageDialog(this, "注册成功");
-//	     }
-//	     else {
-//	    	 JOptionPane.showMessageDialog(this, "注册失败!","注册学生管理系统",JOptionPane.ERROR_MESSAGE);
-//	     }
-//	}
+
 	
 }

@@ -42,7 +42,7 @@
         <column length="10" name="TenLop" not-null="true"
            />      
   </many-to-one>   
-  <many-to-one class="SinhVien.SinhVien" name="sinhVien"  fetch="select" insert="false" update="false">         
+  <many-to-one class="SinhVien.SinhVien" name="sinhVien"  fetch="select" insert="false" update="false" lazy ="false">         
          <column length="10" name="MSSV" not-null="true"
           />      
   </many-to-one>  

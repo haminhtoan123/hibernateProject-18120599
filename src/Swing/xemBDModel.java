@@ -8,15 +8,22 @@ package Swing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
+
+import BangDiem.BangDiemDAO;
 
 
 /**
@@ -24,12 +31,12 @@ import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
  * @author bob50
  * @param String
  */
-public class SimpleTableModel extends AbstractTableModel
+public class xemBDModel extends AbstractTableModel 
 {
    protected String[] cols;
    protected String[][] Data;
 
-    public SimpleTableModel(String[][] Data, String[] cols ) {
+    public xemBDModel(String[][] Data, String[] cols ) {
         this.cols = cols;
         this.Data = Data;
     }
@@ -37,6 +44,26 @@ public class SimpleTableModel extends AbstractTableModel
     {
     	this.Data = Data;
     }
+    public void getByMSSV(String MSSV)
+    {
+    	for(int i = 0; i<this.getRowCount();i++)
+    	{
+    		if(!Data[i][0].equals(MSSV))
+    		{
+    			removeRow(i);
+    			i--;
+    		}
+    	}
+    	
+    }
+    public void removeRow(int row)
+    {
+    	List<String[]> temp = new ArrayList<String[]>(Arrays.asList(Data));
+    	temp.remove(row);
+        Data = temp.toArray(new String[][]{});
+        fireTableRowsDeleted(row, row);
+    }
+    
     public String[] getCols() {
         return cols;
     }
@@ -75,19 +102,18 @@ public class SimpleTableModel extends AbstractTableModel
 	public Class getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
-//    @Override
-//    public  Object getValueAt(int rowIndex, int columnIndex) {
-//       try {
-//           List<Method> getMethods=ClassRefect.getAllGetMethod(Data.get(rowIndex));          
-//           return getMethods.get(columnIndex).invoke(Data.get(rowIndex), null);
-//       } catch (IllegalAccessException ex) {
-//           Logger.getLogger(SimpleTableModel.class.getName()).log(Level.SEVERE, null, ex);
-//       } catch (IllegalArgumentException ex) {
-//           Logger.getLogger(SimpleTableModel.class.getName()).log(Level.SEVERE, null, ex);
-//       } catch (InvocationTargetException ex) {
-//           Logger.getLogger(SimpleTableModel.class.getName()).log(Level.SEVERE, null, ex);
-//       }
-//       return "";
-//    }
+	@Override 
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+	{
+		Data[rowIndex][columnIndex] = (String) aValue;
+		
+		BangDiemDAO.Update(Data[rowIndex][0],xemBDFrame.Lop.getItemAt(xemBDFrame.Lop.getSelectedIndex()).toString() ,xemBDFrame.MaMon.getItemAt(xemBDFrame.MaMon.getSelectedIndex()).toString(),Float.parseFloat(Data[rowIndex][2]),Float.parseFloat(Data[rowIndex][3]),Float.parseFloat(Data[rowIndex][4]),Float.parseFloat(Data[rowIndex][5]));
+	}
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex)
+	{
+	    return true;
+	}
+
     
 }

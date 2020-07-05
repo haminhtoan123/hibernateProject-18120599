@@ -29,7 +29,7 @@ public class xemTKBFrame extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	JComboBox comboBox ;
-	private SimpleTableModel model;
+	private NormalTableModel model;
 	private JScrollPane scrollPane;
 
 	/**
@@ -87,7 +87,7 @@ public class xemTKBFrame extends JFrame {
 
 		String columns[]= {"Mã Môn","Tên Môn","Phòng Học"};
 		String Data[][] = MonDAO.LayTKB(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
-		model = new SimpleTableModel(Data,columns);
+		model = new NormalTableModel(Data,columns);
 		
 		//System.out.println(model.Data[0][0]);
 		table = new JTable(model);

@@ -29,7 +29,11 @@ public class Mon implements java.io.Serializable{
 	//@Column(name = "PhongHoc")
 	private String phonghoc;
 	public Mon() {}
-	
+	public Mon(String mamon,String tenlop)
+	{
+		this.mamon = mamon;
+		this.tenlop = tenlop;
+	}
 	public String getTenmon() {
 		return tenmon;
 	}

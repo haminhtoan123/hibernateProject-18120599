@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -20,16 +21,21 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import BangDiem.BangDiemDAO;
+import Mon.Mon;
 import Mon.MonDAO;
 import SinhVien.SinhVienDAO;
 
 public class XemDsLopFrame extends JFrame {
 
 	private JPanel contentPane;
-	private JComboBox comboBox ;
-	private SimpleTableModel model;
+	private JComboBox Lop ;
+	public static JComboBox MaMon;
+	private NormalTableModel model;
 	private JTable table;
 	private JScrollPane scrollPane;
+	private List<Mon> dsMon;
+	private List<String> mamon;
+	private DefaultComboBoxModel boxModel;
 	//JTable table;
 	/**
 	 * Launch the application.
@@ -72,11 +78,23 @@ public class XemDsLopFrame extends JFrame {
 		//chonLop.setBounds(73, 58, 56, 16);
 		contentPane.add(chonLop);
 		
-		comboBox = new JComboBox(new DefaultComboBoxModel<String>(BangDiemDAO.LayDSLop().toArray(new String[0])));
+		Lop = new JComboBox(new DefaultComboBoxModel<String>(BangDiemDAO.LayDSLop().toArray(new String[0])));
+		Lop.addActionListener(new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		      	comboBoxEvent(e);
+		    }
+		});
 		//comboBox.setBounds(133, 55, 72, 22);
-		contentPane.add(comboBox);
+		contentPane.add(Lop);
 
+		dsMon = MonDAO.LayDanhSachMonTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString());
+	
+		mamon =MonDAO.ListMonToString(dsMon);
+		mamon.add(0, null );
+		boxModel = new DefaultComboBoxModel<String>(mamon.toArray(new String[0]));
+		MaMon = new JComboBox(boxModel);
 		
+		contentPane.add(MaMon);
 		JButton btnNewButton = new JButton("Xem");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,8 +103,8 @@ public class XemDsLopFrame extends JFrame {
 		});
 		contentPane.add(btnNewButton);
 		String columns[]= {"MSSV","Họ Tên","Giới Tính","CMND"};
-		String Data[][] = SinhVienDAO.LayDSSVTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
-		model = new SimpleTableModel(Data,columns);
+		String Data[][] = SinhVienDAO.LayDSSVTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString());
+		model = new NormalTableModel(Data,columns);
 		
 		//System.out.println(model.Data[0][0]);
 		table = new JTable(model);
@@ -96,15 +114,32 @@ public class XemDsLopFrame extends JFrame {
 
 		contentPane.add(scrollPane);
 	}
+	private void comboBoxEvent(ActionEvent e)
+	{
+		dsMon = MonDAO.LayDanhSachMonTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString());
+		mamon =MonDAO.ListMonToString(dsMon);
+	//	boxModel.addElement("ecs");
+		boxModel.removeAllElements();
+		boxModel.addElement(null);
+		for(int i=0;i<mamon.size();i++)
+		{
+			boxModel.addElement(mamon.get(i));
+		}
+		//model = new DefaultComboBoxModel<String>(mamon.toArray(new String[0]));
+	
+		contentPane.revalidate();
+		contentPane.repaint();
+	}
 	private void xemActionPerformed(ActionEvent e)
 	{
 	
 		//System.out.println(Data[0][0]+ " : " +Data[0][1]+ " : " + Data[0][2]);
 		//table.removeAll();
 		//table.setModel(temp);
-		
-		model.update(SinhVienDAO.LayDSSVTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString()));
-	
+		if(MaMon.getItemAt(MaMon.getSelectedIndex())==null)
+		model.update(SinhVienDAO.LayDSSVTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString()));
+		else
+			model.update(BangDiemDAO.LayDSSVTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString(), MaMon.getItemAt(MaMon.getSelectedIndex()).toString()));
 	//	scrollPane.setBounds(27, 394, 505, -285);
 	
 	    contentPane.revalidate();

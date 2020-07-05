@@ -1,6 +1,7 @@
 package Swing;
 
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -18,21 +19,32 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 import BangDiem.BangDiemDAO;
 import SinhVien.SinhVienDAO;
 import Mon.*;
-public class xemBDFrame extends JFrame {
+import javax.swing.JTextField;
+public class xemBDFrame extends JFrame  
+{
 
 	private JPanel contentPane;
-	private JComboBox comboBox;
-	private JComboBox comboBox_1;
+	public static JComboBox Lop;
+	public static JComboBox MaMon;
 	private JTable table;
 	private List<Mon> dsMon;
 	private List<String> mamon;
 	private DefaultComboBoxModel boxModel;
-	private SimpleTableModel tableModel;
+	private xemBDModel tableModel;
 	private JScrollPane scrollPane;
+	private JLabel tiLeDau;
+	private JLabel soLuongDau;
+	private BangDiemDAO DAO;
+	private JLabel nhapMSSV;
+	private JTextField MSSV;
+	//private static final CellEditor tableCellEditor = new CellEditor();
 	/**
 	 * Launch the application.
 	 */
@@ -63,7 +75,7 @@ public class xemBDFrame extends JFrame {
 	                e.getWindow().dispose();
 	            }
 	        });
-		setBounds(100, 100, 600, 300);
+		setBounds(100, 100, 1000, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new  FlowLayout());
@@ -74,10 +86,10 @@ public class xemBDFrame extends JFrame {
 		//chonLop.setBounds(73, 58, 56, 16);
 		contentPane.add(chonLop);
 		
-		comboBox = new JComboBox(new DefaultComboBoxModel<String>(BangDiemDAO.LayDSLop().toArray(new String[0])));
+		Lop = new JComboBox(new DefaultComboBoxModel<String>(BangDiemDAO.LayDSLop().toArray(new String[0])));
 		//comboBox.setBounds(133, 55, 72, 22);
-		contentPane.add(comboBox);
-		comboBox.addActionListener(new ActionListener () {
+		contentPane.add(Lop);
+		Lop.addActionListener(new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 		      	comboBoxEvent(e);
 		    }
@@ -89,44 +101,63 @@ public class xemBDFrame extends JFrame {
 			}
 		});
 		
-		contentPane.add(btnNewButton);
 		
-		System.out.println(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
+		System.out.println(Lop.getItemAt(Lop.getSelectedIndex()).toString());
 		//System.out.println(MonDAO.LayDanhSachMonTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()));
 		//DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>(MonDAO.LayDanhSachMonTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString()).toArray(new String[0]));
-		dsMon = MonDAO.LayDanhSachMonTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
+		dsMon = MonDAO.LayDanhSachMonTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString());
 		mamon =MonDAO.ListMonToString(dsMon);
 		boxModel = new DefaultComboBoxModel<String>(mamon.toArray(new String[0]));
-		comboBox_1 = new JComboBox(boxModel);
-	
-		contentPane.add(comboBox_1);
+		MaMon = new JComboBox(boxModel);
+		
+		contentPane.add(MaMon);
+		
+		nhapMSSV = new JLabel("MSSV ");
+		contentPane.add(nhapMSSV);
+		
+		MSSV = new JTextField();
+		contentPane.add(MSSV);
+		MSSV.setColumns(10);
 //		
+		contentPane.add(btnNewButton);
 		
+		DAO = new BangDiemDAO();
+		String columns[]= {"MSSV","Họ Tên","Điểm GK","Điểm CK","Điểm Khác","Điểm tổng","Trạng Thái"};
+		String Data[][] = DAO.LayDanhSachDiem(Lop.getItemAt(Lop.getSelectedIndex()).toString(),MaMon.getItemAt(MaMon.getSelectedIndex()).toString());
+		tableModel = new xemBDModel(Data,columns);
 		
-		String columns[]= {"MSSV","Họ Tên","Điểm GK","Điểm CK","Điểm Khác","Điểm tổng"};
-		String Data[][] = BangDiemDAO.LayDanhSachDiem(comboBox.getItemAt(comboBox.getSelectedIndex()).toString(),comboBox_1.getItemAt(comboBox_1.getSelectedIndex()).toString());
-		tableModel = new SimpleTableModel(Data,columns);
 		
 		//System.out.println(model.Data[0][0]);
 		table = new JTable(tableModel);
+		
+		
+		
+		
 		 scrollPane = new JScrollPane();
 		scrollPane.setViewportView(table);
 		
 
 		contentPane.add(scrollPane);
+		tiLeDau= new JLabel("Tỉ Lệ Đậu: "+ DAO.getTiledau()*100 +"%");
+		soLuongDau = new JLabel("Số Lượng Đậu: " + DAO.getSoluongdau() );
+		contentPane.add(soLuongDau);
+		contentPane.add(tiLeDau);
 		}
 	private void comboBoxEvent(ActionEvent e)
 	{
-		dsMon = MonDAO.LayDanhSachMonTheoLop(comboBox.getItemAt(comboBox.getSelectedIndex()).toString());
+		dsMon = MonDAO.LayDanhSachMonTheoLop(Lop.getItemAt(Lop.getSelectedIndex()).toString());
 		mamon =MonDAO.ListMonToString(dsMon);
-		boxModel.addElement("ecs");
+	//	boxModel.addElement("ecs");
 		boxModel.removeAllElements();
 		for(int i=0;i<mamon.size();i++)
 		{
 			boxModel.addElement(mamon.get(i));
 		}
 		//model = new DefaultComboBoxModel<String>(mamon.toArray(new String[0]));
-		tableModel.update(BangDiemDAO.LayDanhSachDiem(comboBox.getItemAt(comboBox.getSelectedIndex()).toString(),comboBox_1.getItemAt(comboBox_1.getSelectedIndex()).toString()));
+		tableModel.update(DAO.LayDanhSachDiem(Lop.getItemAt(Lop.getSelectedIndex()).toString(),MaMon.getItemAt(MaMon.getSelectedIndex()).toString()));
+		tableModel.fireTableDataChanged();
+		tiLeDau.setText("Tỉ Lệ Đậu: "+ String.format("%.2f",DAO.getTiledau()*100) +"%");
+		soLuongDau.setText("Số Lượng Đậu: " + DAO.getSoluongdau() );
 		contentPane.revalidate();
 		contentPane.repaint();
 	}
@@ -134,10 +165,19 @@ public class xemBDFrame extends JFrame {
 	private void xemActionPerformed(ActionEvent e)
 	{
 		
-		tableModel.update(BangDiemDAO.LayDanhSachDiem(comboBox.getItemAt(comboBox.getSelectedIndex()).toString(),comboBox_1.getItemAt(comboBox_1.getSelectedIndex()).toString()));
-	    contentPane.revalidate();
-	    contentPane.repaint();
-	}
+		tableModel.update(DAO.LayDanhSachDiem(Lop.getItemAt(Lop.getSelectedIndex()).toString(),MaMon.getItemAt(MaMon.getSelectedIndex()).toString()));
+		tiLeDau.setText("Tỉ Lệ Đậu: "+ String.format("%.2f",DAO.getTiledau()*100) +"%");
+		soLuongDau.setText("Số Lượng Đậu: " + DAO.getSoluongdau() );
+		if(!MSSV.getText().equals(""))
+		tableModel.getByMSSV(MSSV.getText());//**
+		
+		tableModel.fireTableDataChanged();
 	
+		System.out.println(DAO.getTiledau());
+		contentPane.revalidate();
+	    contentPane.repaint();
+	    System.out.println(tableModel.getRowCount());
+	}
 
 }
+

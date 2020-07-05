@@ -2,7 +2,6 @@ package Swing;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -18,11 +17,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class ImportTKBFrame extends JFrame {
+public class ImportBDFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel statusLabel;
 	private String URL;
+
 	/**
 	 * Launch the application.
 	 */
@@ -30,7 +30,7 @@ public class ImportTKBFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ImportTKBFrame frame = new ImportTKBFrame();
+					ImportBDFrame frame = new ImportBDFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,8 +42,8 @@ public class ImportTKBFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ImportTKBFrame() {
-		 setTitle("Import Thời Khóa Biểu");
+	public ImportBDFrame() {
+		 setTitle("Import Bảng Điểm");
 	     setSize(500, 250);
 	     addWindowListener(new WindowAdapter()
 	        {
@@ -62,7 +62,6 @@ public class ImportTKBFrame extends JFrame {
 	        getContentPane().add(statusLabel);
 	        setVisible(true);
 	       // headerLabel.setText("Control in action: JFileChooser");
-	      
 	        final JFileChooser fileDialog = new JFileChooser();
 	        FileFilter filter = new FileNameExtensionFilter("CSV document (*.csv)", "csv");
 	        //fileDialog.addChoosableFileFilter(filter);
@@ -92,7 +91,7 @@ public class ImportTKBFrame extends JFrame {
 	        showFileDialogButton.addActionListener(new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
-	                int returnVal = fileDialog.showOpenDialog(ImportTKBFrame.this);
+	                int returnVal = fileDialog.showOpenDialog(ImportBDFrame.this);
 	                if (returnVal == JFileChooser.APPROVE_OPTION) {
 	                    java.io.File file = fileDialog.getSelectedFile();
 	                    try {
@@ -118,12 +117,12 @@ public class ImportTKBFrame extends JFrame {
 		 {
 			 URL = URL.substring(6, URL.length());
 			 System.out.println(URL);
-             statusLabel.setText( Import.Import.ImportTKB(URL));
+             statusLabel.setText( Import.JDBC.ImportBangDiem(URL));
 		 }
 	/*	 if(tenLop.getText().equals(""))
 		 statusLabel.setText("Nhập Tên Lớp!!!");*/
 		 
 		
 	}
-
+	
 }

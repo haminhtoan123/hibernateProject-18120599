@@ -11,7 +11,6 @@ import org.hibernate.Transaction;
 import BangDiem.BangDiemDAO;
 import Mon.Mon;
 import Mon.MonDAO;
-import Processing.Test;
 import SinhVien.SinhVien;
 import SinhVien.SinhVienDAO;
 import util.HibernateUtil;
@@ -33,7 +32,7 @@ public class Import {
 		SessionFactory factory;
 		 factory = HibernateUtil.getSessionFactory();
 		 Session session = factory.openSession();
-		 Transaction transaction =  session.beginTransaction();
+
 		// -> lay ra mon vua add vao
 		
 	    String hql = "SELECT distinct(tenlop) FROM Mon M WHERE tenlop NOT IN (SELECT tenlop FROM BangDiem B)";
@@ -54,15 +53,17 @@ public class Import {
 		 List<SinhVien> ds= SinhVienDAO.LayDanhSachSinhVienTheoLop(TenLopVuaThem);// ds lop cua TKB vua them
 		 
 		 
-	    for(int i=0;i<ds.size();i++)
-	    {
-	    	System.out.println("\n Ho ten: " + ds.get(i).getHoten()+ "\n MSSV: " + ds.get(i).getMssv() );
-	    	for(int j=0;j<MonVuaThem.size();j++)
-	    	{
-	    	System.out.println("\nMa Mon: " +  MonVuaThem.get(j).getMamon() +" \n TenLop: "+ MonVuaThem.get(j).getTenlop());
-	    	BangDiemDAO.DangKiMon(ds.get(i), MonVuaThem.get(j), session,transaction);
-	    	}
-	    }
+		    for(int i=0;i<ds.size();i++)
+		    {	
+		    
+		    	System.out.println("\n Ho ten: " + ds.get(i).getHoten()+ "\n MSSV: " + ds.get(i).getMssv() );
+		    	for(int j=0;j<MonVuaThem.size();j++)
+		    	{
+		    		Transaction transaction =session.beginTransaction();
+		    	System.out.println("\nMa Mon: " +  MonVuaThem.get(j).getMamon() +" \n TenLop: "+ MonVuaThem.get(j).getTenlop());
+		    	BangDiemDAO.DangKiMon(ds.get(i), MonVuaThem.get(j), session,transaction);
+		    	}
+		    }
 	    return "Thành Công";
 	    }
 		catch(Exception e)
